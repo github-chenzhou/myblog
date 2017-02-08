@@ -1,6 +1,12 @@
 - name: 豆神
-  url: https://xxxx.com
+  url: http://www.chenhutong.com/react-doushen/
 - name: 雨课堂
-  url: http://xxx.com/
+  url: http://ykt.io
 - name: 中交启星
-  url: http://xxx.io/
+  url: http://www.geneedu.cn/honeybee/personcenter/index.do
+- name: 年会庆典
+  url: http://www.geneedu.cn/estarfe/guajiang/mobile/index.html
+- name: 年会抽奖
+  url: http://www.geneedu.cn/estarfe/guajiang/lottery/lottery.html
+- name: 抽奖控制
+  url: http://www.geneedu.cn/estarfe/guajiang/lottery/lotteryAdmin.html

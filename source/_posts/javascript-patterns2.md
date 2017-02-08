@@ -1,6 +1,6 @@
 ---
 title: 高质量JavaScript基本要点
-date: 2017-2-7
+date: 2014-2-7
 tags:
  - javascript
  - patterns

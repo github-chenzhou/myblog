@@ -1,6 +1,6 @@
 ---
 title: 直接量和构造函数
-date: 2017-1-20
+date: 2014-1-20
 tags:
  - javascript
  - patterns
