@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>陈舟的博客</title>
+  <subtitle>个人管理 前端技术</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://chenhutong.com/"/>
+  <updated>2017-02-07T09:45:58.000Z</updated>
+  <id>http://chenhutong.com/</id>
+  
+  <author>
+    <name>陈舟</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>高质量JavaScript基本要点</title>
+    <link href="http://chenhutong.com/2017/02/07/javascript-patterns2/"/>
+    <id>http://chenhutong.com/2017/02/07/javascript-patterns2/</id>
+    <published>2017-02-06T16:00:00.000Z</published>
+    <updated>2017-02-07T09:45:58.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;a name=&quot;a1&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&quot;第二章-高质量JavaScript基本要点&quot;&gt;&lt;a href=&quot;#第二章-高质量JavaScript基本要点&quot; class=&quot;headerlink&quot; title=&quot;第二章 高质量JavaScript基本要点&quot;&gt;&lt;/
+    
+    </summary>
+    
+      <category term="javascript" scheme="http://chenhutong.com/categories/javascript/"/>
+    
+    
+      <category term="javascript" scheme="http://chenhutong.com/tags/javascript/"/>
+    
+      <category term="patterns" scheme="http://chenhutong.com/tags/patterns/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>概述about</title>
+    <link href="http://chenhutong.com/2017/01/20/javascript-patterns1/"/>
+    <id>http://chenhutong.com/2017/01/20/javascript-patterns1/</id>
+    <published>2017-01-19T16:00:00.000Z</published>
+    <updated>2017-02-07T09:53:06.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;第一章-概述&quot;&gt;&lt;a href=&quot;#第一章-概述&quot; class=&quot;headerlink&quot; title=&quot;第一章 概述&quot;&gt;&lt;/a&gt;第一章 概述&lt;/h1&gt;&lt;p&gt;JavaScript是一门Web开发语言。起初只是用来操作网页中为数不多的元素（比如图片和表单域），但谁也没
+    
+    </summary>
+    
+      <category term="javascript" scheme="http://chenhutong.com/categories/javascript/"/>
+    
+    
+      <category term="javascript" scheme="http://chenhutong.com/tags/javascript/"/>
+    
+      <category term="patterns" scheme="http://chenhutong.com/tags/patterns/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>直接量和构造函数</title>
+    <link href="http://chenhutong.com/2017/01/20/javascript-patterns3/"/>
+    <id>http://chenhutong.com/2017/01/20/javascript-patterns3/</id>
+    <published>2017-01-19T16:00:00.000Z</published>
+    <updated>2017-02-07T09:46:12.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;a name=&quot;a1&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&quot;第三章-直接量和构造函数&quot;&gt;&lt;a href=&quot;#第三章-直接量和构造函数&quot; class=&quot;headerlink&quot; title=&quot;第三章 直接量和构造函数&quot;&gt;&lt;/a&gt;第三章 直接量和构造函数&lt;/h1&gt;&lt;p&gt;JavaS
+    
+    </summary>
+    
+      <category term="javascript" scheme="http://chenhutong.com/categories/javascript/"/>
+    
+    
+      <category term="javascript" scheme="http://chenhutong.com/tags/javascript/"/>
+    
+      <category term="patterns" scheme="http://chenhutong.com/tags/patterns/"/>
+    
+  </entry>
+  
+</feed>
