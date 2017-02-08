@@ -124,97 +124,24 @@
   <section class="meta">
     
     <h2 class="title">
-      <a href="/2017/02/07/javascript-patterns2/">
-        高质量JavaScript基本要点
+      <a href="/2017/02/08/Web全栈技术指南/">
+        最全前端资源汇集
       </a>
     </h2>
     
     <time>
-      2月 7, 2017
+      2月 8, 2017
     </time>
 		
     
     <div class='cats'>
-        <a href="/categories/javascript/">javascript</a>
+        <a href="/categories/前端资源/">前端资源</a>
     </div>
 
   </section>
   <section class="article typo">
-	  <p><a name="a1"></a></p>
-<h1 id="第二章-高质量JavaScript基本要点"><a href="#第二章-高质量JavaScript基本要点" class="headerlink" title="第二章 高质量JavaScript基本要点"></a>第二章 高质量JavaScript基本要点</h1><p>本章将对一些实质内容展开讨论，这些内容包括最佳实践、模式和编写高质量JavaScript代码的习惯，比如避免全局变量、使用单var声明、循环中的length预缓存、遵守编码约定等等。本章还包括一些非必要的编程习惯，但更多的关注点将放在总体的代码创建过程上，包括撰写API文档、组织相互评审以及使用JSLint。这些习惯和最佳实践可以帮助你写出更好的、更易读的和可维护的代码，当几个月后或数年后再重读你的代码时，你就会深有体会了。</p>
-<p><a name="a2"></a></p>
-<h2 id="编写可维护的代码"><a href="#编写可维护的代码" class="headerlink" title="编写可维护的代码"></a>编写可维护的代码</h2><p>修复软件bug成本很高，而且随着时间的推移，它们造成的损失也越来越大，特别是在已经打包发布了的软件发现了bug的时候。当然最好是发现bug立刻解决掉，但前提是你对你的代码依然很熟悉，否则当你转身投入到另外一个项目的开发中后，根本不记得当初代码的模样了。过了一段时间后你再去阅读当初的代码你需要：</p>
-<ul>
-<li>时间来重新学习并理解问题</li>
-<li>时间去理解问题相关的代码</li>
-</ul>
-<p>对大型项目或者公司来说还有一个不得不考虑的问题，就是解决这个bug的人和制造这个bug的人往往不是同一个人。因此减少理解代码所需的时间成本就显得非常重要，不管是隔了很长时间重读自己的代码还是阅读团队内其他人的代码。这对于公司的利益底线和工程师的幸福指数同样重要，因为每个人都宁愿去开发新的项目而不愿花很多时间和精力去维护旧代码。</p>
-<p>另外一个软件开发中的普遍现象是，在读代码上花的时间要远远超过写代码的时间。常常当你专注于某个问题的时候，你会坐下来用一下午的时间产出大量的代码。当时的场景下代码是可以正常运行的，但当应用趋于成熟，会有很多因素促使你重读代码、改进代码或对代码做微调。比如：</p>
-<ul>
-<li>发现了bug</li>
-<li>需要给应用添加新需求</li>
-<li>需要将应用迁移到新的平台中运行（比如当市场中出现了新的浏览器时）</li>
-<li>代码重构</li>
-<li>由于架构更改或者更换另一种语言导致代码重写</li>
-</ul>
-<p>这些不确定因素带来的后果是，少数人花几小时写的代码需要很多人花几个星期去阅读它。因此，创建可维护的代码对于一个成功的应用来说至关重要。</p>
-<p>可维护的代码意味着代码是：</p>
-<ul>
-<li>可读的</li>
-<li>一致的</li>
-<li>可预测的</li>
-<li>看起来像是同一个人写的</li>
-<li>有文档的</li>
-</ul>
-<p>本章接下来的部分会对这几点深入讲解。</p>
-<p><a name="a3"></a></p>
-<h2 id="减少全局对象"><a href="#减少全局对象" class="headerlink" title="减少全局对象"></a>减少全局对象</h2><p>JavaScript 使用函数来管理作用域，在一个函数内定义的变量称作“局部变量”，局部变量在函数外部是不可见的。另一方面，“全局变量”是不在任何函数体内部声明的变量，或者是直接使用而未明的变量。</p>
-<p>每一个JavaScript运行环境都有一个“全局对象”，不在任何函数体内使用this就可以获得对这个全局对象的引用。你所创建的每一个全局变量都是这个全局对象的属性。为了方便起见，浏览器都会额外提供一个全局对象的属性window，（常常）用以指向全局对象本身。下面的示例代码中展示了如何在浏览器中创建或访问全局变量：</p>
-<pre><code>myglobal = &quot;hello&quot;; // antipattern
-console.log(myglobal); // &quot;hello&quot;
-console.log(window.myglobal); // &quot;hello&quot;
-console.log(window[&quot;myglobal&quot;]); // &quot;hello&quot;
-console.log(this.myglobal); // &quot;hello&quot;
-</code></pre><p><a name="a4"></a></p>
-<h3 id="全局对象带来的困扰"><a href="#全局对象带来的困扰" class="headerlink" title="全局对象带来的困扰"></a>全局对象带来的困扰</h3><p>全局变量的问题是，它们在JavaScript代码执行期间或者整个web页面中始终是可见的。它们存在于同一个命名空间中，因此命名冲突的情况时有发生，毕竟在应用程序的不同模块中，经常会出于某种目的定义相同的全局变量。</p>
-<p>同样，常常网页中所嵌入的代码并不是这个网页的开发者所写，比如：</p>
-<ul>
-<li>网页中使用了第三方的JavaScript库</li>
-<li>网页中使用了广告代码</li>
-<li>网页中使用了用以分析流量和点击率的第三方统计代码</li>
-<li>网页中使用了很多组件，挂件和按钮等等</li>
-</ul>
-<p>假设某一段第三方提供的脚本定义了一个全局变量result。随后你在自己写的某个函数中也定义了一个全局变量result。这时，第二个变量就会覆盖第一个，这时就会导致第三方脚本停止工作。</p>
-<p>因此，为了让你的脚本和这个页面中的其他脚本和谐相处，要尽可能少的使用全局变量，这一点非常重要。本书随后的章节中会讲到一些减少全局变量的技巧和策略，比如使用命名空间或者立即执行的匿名函数等，但减少全局变量最有效的方法是坚持使用var来声明变量。</p>
-<p>由于JavaScript的特点，我们经常有意无意的创建全局变量，毕竟在JavaScript中创建全局变量实在太简单了。首先，你可以不声明而直接使用变量，再者，JavaScirpt中具有“隐式全局对象”的概念，也就是说任何不通过var声明（译注：在JavaScript1.7及以后的版本中，可以通过let来声明块级作用域的变量）的变量都会成为全局对象的一个属性（可以把它们当作全局变量）。看一下下面这段代码：</p>
-<pre><code>function sum(x, y) {
-    // antipattern: implied global
-    result = x + y;
-    return result;
-}
-</code></pre><p>这段代码中，我们直接使用了result而没有事先声明它。这段代码是能够正常工作的，但在调用这个方法之后，会产生一个全局变量result，这会带来其他问题。</p>
-<p>解决办法是，总是使用var来声明变量，下面代码就是改进了的sum()函数：</p>
-<pre><code>function sum(x, y) {
-    var result = x + y;
-    return result;
-}
-</code></pre><p>这里我们要注意一种反模式，就是在var声明中通过链式赋值的方法创建全局变量。在下面这个代码片段中，a是局部变量，但b是全局变量，而作者的意图显然不是如此：</p>
-<pre><code>// antipattern, do not use
-function foo() {
-    var a = b = 0;
-    // ...
-}
-</code></pre><p>为什么会这样？因为这里的计算顺序是从右至左的。首先计算表达式b=0，这里的b是未声明的，这个表达式的值是0，然后通过var创建了局部变量a，并赋值为0。换言之，可以等价的将代码写成这样：</p>
-<pre><code>var a = (b = 0);
-</code></pre><p>如果变量b已经被声明，这种链式赋值的写法是ok的，不会意外的创建全局变量，比如：</p>
-<pre><code>function foo() {
-    var a, b;
-    // ...
-    a = b = 0; // both local
-}
-</code></pre><blockquote>
-<p>避免使用全局变量的另一个原因是出于可移植性考虑的，如果你希望将你的代码运行于不同的平台环境（宿主），使用全局变量则非常危险。很有可能你无意间创建的某个全局变量在当前的平台环境中是不存在的，你认为可以安全的使用，而在其他的环境中却是存在的。</p>
-</blockquote>
+	  <p><a href="https://getfullstack.com/" target="_blank" rel="external">Web全栈技术指南</a><br><a href="https://getfullstack.com/" target="_blank" rel="external">转载地址</a></p>
+<p>“怎样成为一名Web全栈工程师？”<br>“去做，你就能行。”<br>这答案深刻了——问题是从哪儿开始呢？本书试图绘制一张技术地图，让你看清Web开发的全貌，同时它还有足够的细节让你找到通往目标的路径。当然，无论怎样，仅凭一张地图是到不了目的地的，你得靠自己的双脚走过去。<br>我假定读者具有一定的编程基础——你可以是业余的软件开发者、计算机相关专业的学生，也可以是职业的软件工程师——只要你想了解Web开发的全貌或者入门的路径，都可以在这里找到有价值的东西。<br>我将从Web的基础知识开始，依次介绍Web浏览器与服务器的开发要点、Web网站的组成与架构，最后是一些重要的开发/部署工具和技术。本书以一种循序渐进的方式展开，因此推荐读者按顺序阅读，但你也可以直接跳入某一章节，仅当有问题时再回头来看。<br>本书包含了一些示例代码和命令，并且在正文或脚注中说明了执行它们的方法。读者应尽可能动手输入、运行一下这些代码和命令；如果能进一步做一些修改，并思考、查看结果有何不同，那就更好了——这是阅读、学习技术文档的正确方式——经验是无法从纸面上读出来的，有一些坑你必须要踩过，才能说懂得。<br>本书并不绑定某一种编程语言——因此它不叫《XX Web开发指南》，XX可以是Java、PHP、Python或者Ruby等等。本书着重的是Web开发的原理、一般方法和工具。它们是一切Web开发的基础，不论你使用何种编程语言。另一方面，在合适的地方，本书也对相关的编程语言和技术做了介绍，并给出进一步学习的建议。<br>本书也不是某种《技术大全》——它并不巨细靡遗地罗列所有Web相关的技术。相反，它从开发实践的角度出发，力图以简明扼要的方式来介绍那些最重要、最常见的概念和技术，并引导读者自己加深阅读。<br>最后，我试着用一种“敏捷”的方式进行写作：从一个MVP（最小可用产品）开始不断迭代，并实时发布。因此在本书最终定稿前，提纲和内容都会不断更新。另一方面，欢迎你随时提出问题和建议：你的反馈将影响到本书的内容和组织。你可以通过邮件与我联系：louirobert@gmail.com。</p>
 
 
     
@@ -222,9 +149,13 @@ function foo() {
     
 	  <div class="full-width tags">
       
-        <a href="/tags/javascript/">javascript</a>
+        <a href="/tags/标准参考/">标准参考</a>
       
-        <a href="/tags/patterns/">patterns</a>
+        <a href="/tags/转载/">转载</a>
+      
+        <a href="/tags/web/">web</a>
+      
+        <a href="/tags/全栈/">全栈</a>
       
 	  </div>
     
@@ -237,42 +168,31 @@ function foo() {
   <section class="meta">
     
     <h2 class="title">
-      <a href="/2017/01/20/javascript-patterns1/">
-        概述about
+      <a href="/2017/02/08/渐进式 Web 应用程序页面加载性能/">
+        渐进式 Web 应用程序页面加载性能
       </a>
     </h2>
     
     <time>
-      1月 20, 2017
+      2月 8, 2017
     </time>
 		
     
     <div class='cats'>
-        <a href="/categories/javascript/">javascript</a>
+        <a href="/categories/前端开发/">前端开发</a>
     </div>
 
   </section>
   <section class="article typo">
-	  <h1 id="第一章-概述"><a href="#第一章-概述" class="headerlink" title="第一章 概述"></a>第一章 概述</h1><p>JavaScript是一门Web开发语言。起初只是用来操作网页中为数不多的元素（比如图片和表单域），但谁也没想到这门语言的成长是如此迅速。除了适用于客户端浏览器编程，如今JavaScript程序可以运行于越来越多的平台之上。你可以用它来进行服务器端开发（使用.Net或Node.js）、桌面应用程序开发（运行于桌面操作系统）、以及应用程序扩展（Firefox插件或者Photoshop扩展）、移动终端应用和纯命令行的批处理脚本。</p>
-<p>JavaScript同样是一门不寻常的语言。它没有类，许多场景中它使用函数作为一等对象。起初，许多开发者认为这门语言存在很多缺陷，但最近几年情况发生了微妙的变化。有意思的是，有一些老牌语言比如Java和PHP也已经开始添加诸如闭包和匿名函数等新特性，而闭包和匿名函数则是JavaScript程序员最愿意津津乐道的话题。</p>
-<p>JavaScript十分灵活，可以用你所熟悉的其他任何编程语言的编程风格来写JavaScript程序。但最好的方式还是拥抱它所带来的变化、学习它所特有的编程模式。</p>
-<h2 id="模式"><a href="#模式" class="headerlink" title="模式"></a>模式</h2><p>对 “模式”的广义解释是“反复发生的事件或对象的固定用法…可以用来作为重复使用的模板或模型”（<a href="http://en.wikipedia.org/wiki/Pattern）。" target="_blank" rel="external">http://en.wikipedia.org/wiki/Pattern）。</a></p>
-<p>在软件开发领域，模式是指常见问题的通用解决方案。模式不是简单的代码复制和粘贴，而是一种最佳实践，一种高级抽象，是解决某一类问题的范本。</p>
-<p>识别这些模式非常重要，因为：</p>
-<ul>
-<li>这些模式提供了经过论证的最佳实践，它可以帮助我们更好的编码，避免重复制造车轮。</li>
-<li>这些模式提供了高一层的抽象，某个时间段内大脑只能处理一定复杂度的逻辑，因此当你处理更繁琐棘手的问题时，它会帮你理清头绪，你才不会被低级的琐事阻碍大脑思考，因为所有的细枝末节都可以被归类和切分成不同的块（模式）。</li>
-<li>这些模式为开发者和团队提供了沟通的渠道，团队开发者之间往往是异地协作，不会有经常面对面的沟通机会。简单的代码编写技巧和技术问题处理方式的约定（代码注释）使得开发者之间的交流更加通畅。例如，“函数立即执行”用大白话表述成“你写好一个函数后，在函数的结束花括号的后面添加一对括号，这样能在定义函数结束后马上执行这个函数”（我的天）。</li>
-</ul>
-<p>本书将着重讨论下面这三种模式：</p>
-<ul>
-<li>设计模式（Design patterns）</li>
-<li>编码模式（Coding patterns）</li>
-<li>反模式（Antipatterns）</li>
-</ul>
-<p>设计模式最初的定义是来自于“GoF”（四人组，94年版“设计模式”的四个作者）的一本书，这本书在1994年出版，书名全称是“设计模式：可复用面向对象软件基础”。书中列举了一些重要的设计模式，比如单体、工厂、装饰者、观察者等等。但适用于JavaScript的设计模式并不多，尽管设计模式是脱离某种语言而存在的，但通常会以某种语言做范例来讲解设计模式，这些语言多是强类型语言，比如C++和Java。有时直接将其应用于弱类型的动态语言比如JavaScript又显得捉襟见肘。通常这些设计模式都是基于语言的强类型特性以及类的继承。而JavaScript则需要某种轻型的替代方案。本书在第七章将讨论基于 JavaScript实现的一些设计模式。</p>
-<p>编码模式更有趣一些。它们是JavaScript特有的模式和最佳实践，它利用了这门语言独有的一些特性，比如对函数的灵活运用，JavaScript编码模式是本书所要讨论的重点内容。</p>
-<p>本书中你会偶尔读到一点关于“反模式”的内容，顾名思义，反模式具有某些负作用甚至破坏性，书中会顺便一提。反模式并不是bug或代码错误，它只是一种处理问题的对策，只是这种对策带来的麻烦远超过他们解决的问题。在示例代码中我们会对反模式做明显的标注。</p>
+	  <p><a href="http://blog.zhaiyifan.cn/2016/11/16/pwa-react-p2/" target="_blank" rel="external">使用 React.js 的渐进式 Web 应用程序：第 2 部分 - 页面加载性能</a><br><a href="http://blog.zhaiyifan.cn/2016/11/16/pwa-react-p2/" target="_blank" rel="external">转载地址</a></p>
+<p>这是新系列的第二部分，新系列介绍的是使用 Lighthouse 优化移动 web 应用传输的技巧。本期，我们关注的是页面加载性能。<br>保证页面加载性能是快的</p>
+<p>移动 Web 的速度很关键。平均来说，更快的体验会 延长 70% 的会话 以及两倍以上更多的移动广告收益。基于 React 的 Web 性能投资中，Flipkart Lite 使访问时间提升了三倍， GQ 在流量上得到了 80% 增长，Trainline 在 年收益上增长了 11M 并且 Instagram 的 好感度上升了 33%。</p>
+<p>测量并优化一直很重要。Lighthouse 的页面加载检测会关注：</p>
+<p>第一次有意义的绘制（当页面主内容可见）<br>速度指数（Speed Index）（完全可见）<br>估算的输入延迟（主线程什么时候才能立即处理用户输入）<br>以及 抵达可交互的时间（ app 到开始可用和可交互的时间)<br>关于 PWA 值得关注的有趣指标)，Paul Irish 做了很棒的总结。</p>
+<p>良好性能的目标：</p>
+<p>遵循 RAIL 性能模型 的 L 部分。A+ 的性能是我们所有人都必须力求达到的，即便有的浏览器不支持 Service Worker。我们仍然可以快速地在屏幕上获得一些有意义的内容，并且仅加载我们所需要的<br>在典型网络（3G）和硬件条件下<br>首次访问在 5 秒内可交互，重复访问（Service Worker 可用）则在 2 秒内。<br>首次加载（网络限制下），速度指数在 3000 或者更少。<br>第二次加载（磁盘限制，因为 Service Worker 可用）：速度指数 1000 或者更少。<br>让我们再说说，关于通过 TTI 关注交互性。</p>
+<p>关注抵达可交互时间（TTI）</p>
+<p>为交互性优化，也就是使得 app 尽快能对用户可用（比如让他们可以四处点击，app 可以响应）。这对试图在移动设备上提供一流用户体验的现代 web 体验很关键。</p>
 
 
     
@@ -280,9 +200,11 @@ function foo() {
     
 	  <div class="full-width tags">
       
-        <a href="/tags/javascript/">javascript</a>
+        <a href="/tags/web/">web</a>
       
-        <a href="/tags/patterns/">patterns</a>
+        <a href="/tags/前端开发/">前端开发</a>
+      
+        <a href="/tags/性能调优/">性能调优</a>
       
 	  </div>
     
@@ -295,63 +217,27 @@ function foo() {
   <section class="meta">
     
     <h2 class="title">
-      <a href="/2017/01/20/javascript-patterns3/">
-        直接量和构造函数
+      <a href="/2017/02/08/前端开发者手册/">
+        前端开发者手册
       </a>
     </h2>
     
     <time>
-      1月 20, 2017
+      2月 8, 2017
     </time>
 		
     
     <div class='cats'>
-        <a href="/categories/javascript/">javascript</a>
+        <a href="/categories/前端开发/">前端开发</a>
     </div>
 
   </section>
   <section class="article typo">
-	  <p><a name="a1"></a></p>
-<h1 id="第三章-直接量和构造函数"><a href="#第三章-直接量和构造函数" class="headerlink" title="第三章 直接量和构造函数"></a>第三章 直接量和构造函数</h1><p>JavaScript中的直接量模式更加简洁、富有表现力，且在定义对象时不容易出错。本章将对直接量展开讨论，包括对象、数组和正则表达式直接量，以及为什么要优先使用它们而不是如<code>Object()</code>和<code>Array()</code>这些等价的内置构造器函数。本章同样会介绍JSON格式，JSON是使用数组和对象直接量的形式定义的一种数据转换格式。本章还会讨论自定义构造函数，包括如何强制使用new以确保构造函数的正确执行。</p>
-<p>本章还会补充讲述一些基础知识，比如内置包装对象Number()、String()和Boolean()，以及如何将它们和原始值（数字、字符串和布尔值）比较。最后，快速介绍一下Error()构造函数的用法。</p>
-<p><a name="a2"></a></p>
-<h2 id="对象直接量"><a href="#对象直接量" class="headerlink" title="对象直接量"></a>对象直接量</h2><p>我们可以将JavaScript中的对象简单的理解为名值对组成的散列表（hash table），在其他编程语言中被称作“关联数组”。其中的值可以是原始值也可以是对象，不管是什么类型，它们都是“属性”（properties），属性值同样可以是函数，这时属性就被称为“方法”（methods）。</p>
-<p>JavaScript中自定义的对象（用户定义的本地对象）任何时候都是可变的。内置本地对象的属性也是可变的。你可以先创建一个空对象，然后在需要时给它添加功能。“对象直接量写法（object literal notation）”是按需创建对象的一种理想方式。</p>
-<p>看一下这个例子：</p>
-<pre><code>// start with an empty object
-var dog = {};
-
-// add one property
-dog.name = &quot;Benji&quot;;
-
-// now add a method
-dog.getName = function () {
-    return dog.name;
-};
-</code></pre><p>在这个例子中，我们首先定义了一个空对象，然后添加了一个属性和一个方法，在程序的生命周期内的任何时刻都可以：</p>
-<p>1.更改属性和方法的值，比如：</p>
-<pre><code>dog.getName = function () {
-    // redefine the method to return
-    // a hardcoded value
-    return &quot;Fido&quot;;
-};
-</code></pre><p>2.完全删除属性/方法</p>
-<pre><code>delete dog.name;
-</code></pre><p>3.添加更多的属性和方法</p>
-<pre><code>dog.say = function () {
-    return &quot;Woof!&quot;;
-};
-dog.fleas = true;
-</code></pre><p>其实不必每次开始都创建空对象，对象直接量模式可以直接在创建对象时添加功能，就像下面这个例子所展示的：</p>
-<pre><code>var dog = {
-    name: &quot;Benji&quot;,
-    getName: function () {
-        return this.name;
-    }
-};
-</code></pre><blockquote>
-<p>在本书中多次提到“空对象”（“blank object”和“empty object”）。这只是某种简称，要知道JavaScript中根本不存在真正的空对象，理解这一点至关重要。即使最简单的<code>{}</code>对象包含从Object.prototype继承来的属性和方法。我们提到的“空（empty）对象”只是说这个对象没有自己的属性，不考虑它是否有继承来的属性。</p>
-</blockquote>
+	  <p><a href="https://dwqs.gitbooks.io/frontenddevhandbook/content/" target="_blank" rel="external">前端开发者手册</a><br><a href="https://dwqs.gitbooks.io/frontenddevhandbook/content/" target="_blank" rel="external">转载地址</a></p>
+<p>撰写该手册的目的有两个: 一是为潜在以及正在实践的前端开发人员提供一个包括学习资料和开发工具的专业资源; 二是该手册可以被管理者, CTO, 讲师和猎头用来作为洞察前端开发的实践.<br>该手册的内容支持Web技术(HTML, CSS, DOM, 和 JavaScript), 并且手册提供的解决方案都直接建立在这些开放的技术之上. 手册中所引用的素材和讨论都是最好的或者当前前端开发者们需要面对的问题.<br>该手册不应该被视为一个前端开发者对所有可用资源的综合大纲, 其价值在于简洁, 专注和及时管理足够的分类信息, 不致于任何人沉浸在任何一个特定的主题.<br>该手册会每年发布一个更新内容.<br>该手册分为三个部分:<br>第一部分：前端开发实践</p>
+<p>第一部分会大致描述前端工程的实践<br>第二部分：学习前端开发</p>
+<p>第二部分为成为一个前端开发人员确定了自主学习的直接资源<br>第三部分：前端开发工具</p>
+<p>第三部分会简单地讨论一些前端开发工具的使用</p>
 
 
     
@@ -359,9 +245,60 @@ dog.fleas = true;
     
 	  <div class="full-width tags">
       
-        <a href="/tags/javascript/">javascript</a>
+        <a href="/tags/标准参考/">标准参考</a>
       
-        <a href="/tags/patterns/">patterns</a>
+        <a href="/tags/web/">web</a>
+      
+        <a href="/tags/手册/">手册</a>
+      
+        <a href="/tags/前端开发/">前端开发</a>
+      
+	  </div>
+    
+  </section>
+</article>
+    </div>
+  
+    <div class='post-wrapper'>
+      <article class="post ">
+  <section class="meta">
+    
+    <h2 class="title">
+      <a href="/2017/02/08/CSS Guidelines/">
+        CSS Guidelines
+      </a>
+    </h2>
+    
+    <time>
+      2月 8, 2017
+    </time>
+		
+    
+    <div class='cats'>
+        <a href="/categories/前端学习/">前端学习</a>, <a href="/categories/前端学习/规范/">规范</a>
+    </div>
+
+  </section>
+  <section class="article typo">
+	  <p><a href="https://getfullstack.com/" target="_blank" rel="external">CSS Guidelines</a><br><a href="https://getfullstack.com/" target="_blank" rel="external">转载地址</a></p>
+<p>High-level advice and guidelines for writing sane, manageable, scalable CSS</p>
+<p>CSS is not a pretty language. While it is simple to learn and get started with, it soon becomes problematic at any reasonable scale. There isn’t much we can do to change how CSS works, but we can make changes to the way we author and structure it.</p>
+<p>In working on large, long-running projects, with dozens of developers of differing specialities and abilities, it is important that we all work in a unified way in order to—among other things—</p>
+<p>keep stylesheets maintainable;<br>keep code transparent, sane, and readable;<br>keep stylesheets scalable.<br>There are a variety of techniques we must employ in order to satisfy these goals, and CSS Guidelines is a document of recommendations and approaches that will help us to do so.</p>
+
+
+    
+    
+    
+	  <div class="full-width tags">
+      
+        <a href="/tags/web/">web</a>
+      
+        <a href="/tags/CSS/">CSS</a>
+      
+        <a href="/tags/BEM/">BEM</a>
+      
+        <a href="/tags/规范/">规范</a>
       
 	  </div>
     
@@ -391,16 +328,28 @@ dog.fleas = true;
 <div class='content'>
     <ul class="entry">
     
-        <li><a class="flat-box" target="_blank" href="https://xxxx.com">
+        <li><a class="flat-box" target="_blank" href="http://www.chenhutong.com/react-doushen/">
             <div class='name'>豆神</div>
         </a></li>
     
-        <li><a class="flat-box" target="_blank" href="http://xxx.com/">
+        <li><a class="flat-box" target="_blank" href="http://ykt.io">
             <div class='name'>雨课堂</div>
         </a></li>
     
-        <li><a class="flat-box" target="_blank" href="http://xxx.io/">
+        <li><a class="flat-box" target="_blank" href="http://www.geneedu.cn/honeybee/personcenter/index.do">
             <div class='name'>中交启星</div>
+        </a></li>
+    
+        <li><a class="flat-box" target="_blank" href="http://www.geneedu.cn/estarfe/guajiang/mobile/index.html">
+            <div class='name'>年会庆典</div>
+        </a></li>
+    
+        <li><a class="flat-box" target="_blank" href="http://www.geneedu.cn/estarfe/guajiang/lottery/lottery.html">
+            <div class='name'>年会抽奖</div>
+        </a></li>
+    
+        <li><a class="flat-box" target="_blank" href="http://www.geneedu.cn/estarfe/guajiang/lottery/lotteryAdmin.html">
+            <div class='name'>抽奖控制</div>
         </a></li>
     
     </ul>
@@ -413,7 +362,21 @@ dog.fleas = true;
     
     <ul class="entry">
     
+        <li><a class="flat-box" href="/categories/app/"><div class='name'>app</div><div class='badget'>1</div></a></li>
+    
         <li><a class="flat-box" href="/categories/javascript/"><div class='name'>javascript</div><div class='badget'>3</div></a></li>
+    
+        <li><a class="flat-box" href="/categories/前端基础/"><div class='name'>前端基础</div><div class='badget'>6</div></a></li>
+    
+        <li><a class="flat-box" href="/categories/前端学习/"><div class='name'>前端学习</div><div class='badget'>1</div></a></li>
+    
+        <li><a class="flat-box" href="/categories/前端开发/"><div class='name'>前端开发</div><div class='badget'>3</div></a></li>
+    
+        <li><a class="flat-box" href="/categories/前端基础/前端资源/"><div class='name'>前端资源</div><div class='badget'>2</div></a></li>
+    
+        <li><a class="flat-box" href="/categories/前端资源/"><div class='name'>前端资源</div><div class='badget'>1</div></a></li>
+    
+        <li><a class="flat-box" href="/categories/前端学习/规范/"><div class='name'>规范</div><div class='badget'>1</div></a></li>
     
     </ul>
     
@@ -424,7 +387,7 @@ dog.fleas = true;
 <div class="m_widget tagcloud">
     <div class="header">Tags</div>
     <div class='content'>
-        <a href="/tags/javascript/" style="font-size: 14px; color: #808080">javascript</a> <a href="/tags/patterns/" style="font-size: 14px; color: #808080">patterns</a>
+        <a href="/tags/BEM/" style="font-size: 14px; color: #808080">BEM</a> <a href="/tags/CSS/" style="font-size: 17px; color: #404040">CSS</a> <a href="/tags/React/" style="font-size: 14px; color: #808080">React</a> <a href="/tags/React-Native/" style="font-size: 14px; color: #808080">React Native</a> <a href="/tags/github/" style="font-size: 15px; color: #6b6b6b">github</a> <a href="/tags/html5/" style="font-size: 14px; color: #808080">html5</a> <a href="/tags/javascript/" style="font-size: 19px; color: #151515">javascript</a> <a href="/tags/meta/" style="font-size: 14px; color: #808080">meta</a> <a href="/tags/patterns/" style="font-size: 16px; color: #555">patterns</a> <a href="/tags/web/" style="font-size: 19px; color: #151515">web</a> <a href="/tags/全栈/" style="font-size: 14px; color: #808080">全栈</a> <a href="/tags/前端开发/" style="font-size: 15px; color: #6b6b6b">前端开发</a> <a href="/tags/前端资源/" style="font-size: 15px; color: #6b6b6b">前端资源</a> <a href="/tags/性能调优/" style="font-size: 14px; color: #808080">性能调优</a> <a href="/tags/手册/" style="font-size: 15px; color: #6b6b6b">手册</a> <a href="/tags/标准参考/" style="font-size: 20px; color: #000">标准参考</a> <a href="/tags/移动端/" style="font-size: 14px; color: #808080">移动端</a> <a href="/tags/规范/" style="font-size: 14px; color: #808080">规范</a> <a href="/tags/转载/" style="font-size: 18px; color: #2b2b2b">转载</a>
     </div>
 </div>
 
